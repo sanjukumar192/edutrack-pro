@@ -1,0 +1,7 @@
+{
+  "name": "EduTrack Pro",
+  "description": "A comprehensive school management system featuring bulk student upload, QR code attendance tracking, reward coin management, and AI-powered insights.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
