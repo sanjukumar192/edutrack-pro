@@ -14,6 +14,9 @@ import { generateSchoolReport } from './services/geminiService';
 import { Student, Teacher, AttendanceRecord, CoinTransaction, UserRole, RegistrationRequest, RequestStatus, Gift, RedemptionRequest } from './types';
 import { Users, Award, Download, FileSpreadsheet, Bot, Loader2, CheckCircle, Search, Eye, ChevronDown, ChevronUp } from 'lucide-react';
 import { db } from "./firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase";
+import { Login } from "./components/Login";
 
 // Initial Mock Gifts
 const DEFAULT_GIFTS: Gift[] = [
@@ -25,6 +28,21 @@ const DEFAULT_GIFTS: Gift[] = [
 ];
 
 function App() {
+
+  const [user, setUser] = useState<any>(null);
+const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const unsub = onAuthStateChanged(auth, (u) => {
+    setUser(u);
+    setLoading(false);
+  });
+  return () => unsub();
+}, []);
+
+if (loading) return <div>Loading...</div>;
+if (!user) return <Login />;
+
   // --- State Management ---
   const [role, setRole] = useState<UserRole>(UserRole.ADMIN);
   const [view, setView] = useState<string>('dashboard');
