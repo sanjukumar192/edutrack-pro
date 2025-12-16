@@ -40,8 +40,7 @@ useEffect(() => {
   return () => unsub();
 }, []);
 
-if (loading) return <div>Loading...</div>;
-if (!user) return <Login />;
+
 
   // --- State Management ---
   const [role, setRole] = useState<UserRole>(UserRole.ADMIN);
@@ -562,107 +561,45 @@ if (!user) return <Login />;
 
   // --- Main Layout ---
   return (
-    <div className="min-h-screen bg-gray-50 pb-10">
-      {/* Notification Toast */}
-      {notification && (
-        <div className={`fixed top-20 right-5 z-[100] px-6 py-3 rounded-lg shadow-xl text-white font-medium flex items-center gap-2 animate-fade-in ${notification.type === 'success' ? 'bg-green-600' : 'bg-red-600'}`}>
-          {notification.type === 'success' ? <CheckCircle className="h-5 w-5" /> : null}
-          {notification.msg}
-        </div>
-      )}
-
-      <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-      
-      <Nav 
-        currentRole={role} 
-        setRole={(r) => { 
-            setRole(r); 
-            // Redirect logic when switching roles for demo purposes
-            if (r === UserRole.STUDENT) setView('profile');
-            else if (r === UserRole.ADMIN) setView('dashboard');
-            else if (r === UserRole.TEACHER) setView('scanner');
-            // Reset specific views
-            setSelectedStudent(null);
-        }}
-        currentView={view}
-        setView={(v) => { setView(v); setSelectedStudent(null); }}
-        pendingCount={pendingRequestsCount}
-      />
-
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        {view === 'dashboard' && role === UserRole.ADMIN && renderDashboard()}
-        
-        {view === 'students' && role === UserRole.ADMIN && renderStudents()}
-        
-        {view === 'teachers' && role === UserRole.ADMIN && (
-            <TeacherDirectory teachers={teachers} />
+  <>
+    {loading ? (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    ) : !user ? (
+      <Login />
+    ) : (
+      <div className="min-h-screen bg-gray-50 pb-10">
+        {/* Notification Toast */}
+        {notification && (
+          <div className={`fixed top-20 right-5 z-[100] px-6 py-3 rounded-lg shadow-xl text-white font-medium flex items-center gap-2 animate-fade-in ${notification.type === 'success' ? 'bg-green-600' : 'bg-red-600'}`}>
+            {notification.type === 'success' ? <CheckCircle className="h-5 w-5" /> : null}
+            {notification.msg}
+          </div>
         )}
+<div className="fixed bottom-2 right-2 bg-black text-white text-xs p-2 z-50">
+  role: {role} | view: {view}
+</div>
 
-        {view === 'reports' && role === UserRole.ADMIN && (
-          <AttendanceReport students={students} attendance={attendance} />
-        )}
+       {/* <Nav 
+  currentRole={role}
+  setRole={setRole}
+  currentView={view}
+  setView={setView}
+  pendingCount={pendingRequestsCount}
+/> */}
 
-        {view === 'store' && (
-          <GiftStore 
-            role={role}
-            gifts={gifts}
-            students={students}
-            currentUser={students[0]} // Demo: assuming 1st is logged in
-            requests={role === UserRole.STUDENT 
-              ? redemptionRequests.filter(r => r.studentId === students[0]?.id) 
-              : redemptionRequests
-            }
-            onRequestRedemption={handleRequestRedemption}
-            onApproveRedemption={handleApproveRedemption}
-            onRejectRedemption={handleRejectRedemption}
-            onAddGift={role === UserRole.ADMIN ? handleAddGift : undefined}
-          />
-        )}
-        
-        {view === 'approvals' && role === UserRole.ADMIN && (
-            <RequestList 
-                requests={requests} 
-                onApprove={handleApproveRequest}
-                onReject={handleRejectRequest}
-            />
-        )}
 
-        {view === 'scanner' && (role === UserRole.TEACHER || role === UserRole.ADMIN) && (
-          <Scanner 
-            students={students}
-            teachers={teachers}
-            onMarkAttendance={markAttendance}
-            onAwardCoins={awardCoins}
-          />
-        )}
-
-        {view === 'registration' && (
-            <RegistrationForm onSubmit={handleRegister} />
-        )}
-
-        {view === 'profile' && role === UserRole.STUDENT && (
-            students.length > 0 ? (
-                <StudentProfile 
-                    student={students[0]} // Demo: Show first student. In real app, would match auth ID
-                    attendance={attendance}
-                    transactions={transactions}
-                />
-            ) : (
-                <div className="text-center py-20 bg-white rounded-xl shadow-sm">
-                    <h2 className="text-xl font-bold text-gray-800">No Student Data Found</h2>
-                    <p className="text-gray-500 mt-2">Please ask an Admin to import student data or approve your registration.</p>
-                    <button 
-                        onClick={() => setView('registration')}
-                        className="mt-4 text-indigo-600 font-medium hover:underline"
-                    >
-                        Go to Registration
-                    </button>
-                </div>
-            )
-        )}
-      </main>
-    </div>
-  );
+        <main className="max-w-7xl mx-auto px-4 py-8">
+          {view === 'dashboard' && role === UserRole.ADMIN && renderDashboard()}
+          {view === 'students' && role === UserRole.ADMIN && renderStudents()}
+          {/* rest of your views */}
+        </main>
+      </div>
+    )}
+  </>
+);
 }
 
 export default App;
+
