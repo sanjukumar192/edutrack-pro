@@ -9,7 +9,8 @@ export function Nav({
   role: UserRole;
   view: string;
   setView: (v: string) => void;
-}) {
+}) 
+ {
   const items = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, roles: [UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT] },
     { id: "students", label: "Students", icon: Users, roles: [UserRole.ADMIN] },
