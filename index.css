@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* fallback so build never fails */
+html, body, #root {
+  height: 100%;
+}
