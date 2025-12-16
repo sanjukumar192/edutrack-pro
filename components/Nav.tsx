@@ -66,9 +66,11 @@ export const Nav: React.FC<NavProps> = ({ currentRole, setRole, currentView, set
                 onChange={(e) => setRole(e.target.value as UserRole)}
                 className="bg-transparent border-none focus:ring-0 text-xs font-semibold uppercase cursor-pointer text-indigo-100 outline-none"
               >
-                {Object.values(UserRole).map(r => (
-                  <option key={r} value={r} className="text-gray-900">{r}</option>
-                ))}
+                {[UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT].map(r => (
+  <option key={r} value={r} className="text-gray-900">
+    {r}
+  </option>
+))}
               </select>
             </div>
           </div>
@@ -93,3 +95,4 @@ export const Nav: React.FC<NavProps> = ({ currentRole, setRole, currentView, set
     </nav>
   );
 };
+
