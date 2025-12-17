@@ -1,4 +1,3 @@
-// src/types.ts
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -12,20 +11,6 @@ export enum RequestStatus {
   REJECTED = 'REJECTED',
 }
 
-/* =========================
-   FIREBASE USER (IMPORTANT)
-========================= */
-export interface AppUser {
-  uid: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  createdAt: number;
-}
-
-/* =========================
-   REGISTRATION
-========================= */
 export interface RegistrationRequest {
   id: string;
   name: string;
@@ -33,20 +18,18 @@ export interface RegistrationRequest {
   role: UserRole;
   status: RequestStatus;
   timestamp: number;
+  // specific to students
   rollNo?: string;
   section?: string;
 }
 
-/* =========================
-   STUDENTS & TEACHERS
-========================= */
 export interface Student {
   id: string;
   name: string;
   rollNo: string;
   section: string;
   coins: number;
-  email?: string;
+  email?: string; // Link to registration
 }
 
 export interface Teacher {
@@ -57,40 +40,31 @@ export interface Teacher {
   joinDate: number;
 }
 
-/* =========================
-   ATTENDANCE
-========================= */
 export interface AttendanceRecord {
   id: string;
-  userId: string;          // Firebase UID
-  role: UserRole;
-  date: string;            // YYYY-MM-DD
+  studentId: string; // Acts as userId for both students and teachers
+  userRole?: UserRole; // Differentiates the record type
+  date: string; // ISO Date string YYYY-MM-DD
   timestamp: number;
-  markedBy: string;        // Firebase UID (teacher/admin)
+  markedBy: string;
 }
 
-/* =========================
-   COINS
-========================= */
 export interface CoinTransaction {
   id: string;
   studentId: string;
   amount: number;
   timestamp: number;
-  awardedBy: string;       // Firebase UID
+  awardedBy: string;
   reason?: string;
 }
 
-/* =========================
-   GIFTS
-========================= */
 export interface Gift {
   id: string;
   name: string;
   cost: number;
-  icon: string;
+  icon: string; // Emoji or lucide icon name identifier
   description: string;
-  image?: string;
+  image?: string; // Base64 or URL
 }
 
 export interface RedemptionRequest {
@@ -102,8 +76,15 @@ export interface RedemptionRequest {
   status: RequestStatus;
 }
 
-/* =========================
-   COIN CONSTANTS
-========================= */
+export interface AppState {
+  students: Student[];
+  teachers: Teacher[];
+  attendance: AttendanceRecord[];
+  transactions: CoinTransaction[];
+  requests: RegistrationRequest[];
+  currentUserRole: UserRole;
+}
+
 export type CoinValue = 100 | 200 | 300 | 500;
+
 export const COIN_VALUES: CoinValue[] = [100, 200, 300, 500];

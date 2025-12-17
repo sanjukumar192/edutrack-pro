@@ -15,8 +15,7 @@
     "lucide-react": "^0.554.0",
     "recharts": "^3.4.1",
     "react-qr-code": "^2.0.18",
-    "html5-qrcode": "^2.3.8",
-    "firebase": "^12.6.0"
+    "html5-qrcode": "^2.3.8"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
